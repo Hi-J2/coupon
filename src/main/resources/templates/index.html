@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/datatables.min.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/script/couponApi.js}"></script>
+    <script type="text/javascript" th:src="@{/script/coupon.js}"></script>
+    <script type="text/javascript" th:src="@{/script/datatables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/script/commonUtil.js}"></script>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>COUPON 발급</title>
+</head>
+<body>
+
+<div class="container">
+    <form id="couponForm">
+        <h2>Coupon</h2>
+        <label for="email" class="sr-only">Coupon 발급</label>
+        <input type="text" id="email" class="form-control" placeholder="email" required="true" autofocus=""/>
+        <button class="btn btn-sm btn-primary btn-block" type="submit">쿠폰 발급하기</button>
+    </form>
+</div><!-- /container -->
+<div class="container">
+    <table class="table" id="couponTable">
+        <thead>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Coupon</th>
+            <th>Status</th>
+            <th>Date</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+
+
