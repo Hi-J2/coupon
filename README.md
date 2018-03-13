@@ -8,8 +8,8 @@
   - gradle
 - Frontend 
   - Jquery3 
-  - Bootstrap4 
-  - Datatables
+  - Bootstrap4
+  - DataTables
 
 **Build & Excute**
 
