@@ -9,7 +9,7 @@
 - Frontend 
   -  Jquery3 
   -  Bootstrap4 
-  	  Datatables	
+  -  Datatables
 
 **Build & Excute**
 
