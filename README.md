@@ -7,13 +7,13 @@
   - JPA
   - gradle
 - Frontend 
-  -  Jquery3 
-  -  Bootstrap4 
-  -  Datatables
+  - Jquery3 
+  - Bootstrap4 
+  - Datatables
 
 **Build & Excute**
 
-​	`./gradlew build && java -jar build/libs/coupon-0.0.1.jar`
+​	`./gradle build && java -jar build/libs/coupon-0.0.1.jar`
 
 **Swagger API-Document **
 
