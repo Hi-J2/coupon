@@ -4,6 +4,7 @@
 
 - Backend
   - JAVA8
+  - Spring Boot 1.5.10
   - JPA
   - gradle
 - Frontend 
@@ -13,7 +14,7 @@
 
 **Build & Excute**
 
-​	`./gradle build && java -jar build/libs/coupon-0.0.1.jar`
+​	`gradle build && java -jar build/libs/coupon-0.0.1.jar`
 
 **Swagger API-Document **
 
