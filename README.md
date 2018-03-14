@@ -4,6 +4,7 @@
 
 - Backend
   - JAVA8
+  - Spring Boot 1.5.10
   - JPA
   - gradle
 - Frontend 
