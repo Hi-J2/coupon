@@ -12,11 +12,11 @@
   - Bootstrap4
   - DataTables
 
-**Build & Excute**
+** Build & Excute **
 
 ​	`gradle build && java -jar build/libs/coupon-0.0.1.jar`
 
-**Swagger API-Document **
+** Swagger API-Document **
 
 ​	URL : http://localhost:8080/api-docs
 
