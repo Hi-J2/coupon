@@ -50,7 +50,7 @@ public class CouponServiceImpl implements CouponService {
 		// 쿠폰 유효성 체크
 		invalidCode(code);
 
-		Long id = Long.valueOf(CouponLib.getSeq(code));
+		Long id = Long.valueOf(CouponLib.restoreSeq(code));
 		Coupon coupon = this.findOne(id);
 
 		// 쿠폰 validation

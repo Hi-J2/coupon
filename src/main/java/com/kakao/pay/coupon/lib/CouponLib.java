@@ -4,14 +4,11 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class CouponLib {
-	public static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	public static final int BASE = ALPHABET.length();
 
-	// 생성할 코드 길이
 	static final int GENRATE_COUPON_LENGTH = 8;
-
-	// 62진수 최대 Integer 길이
 	static final int ID_LENGTH = 6;
+	static final int COUPON_CODE_LENGTH = GENRATE_COUPON_LENGTH + ID_LENGTH;
+	static final int HASH_CODE_LENGTH = 2;
 
 	public static String fillZero(String str, int n) {
 		StringBuilder sb = new StringBuilder();
@@ -26,66 +23,29 @@ public class CouponLib {
 		Random random = new Random();
 
 		for (int i = 0; i < length; i++) {
-			seed[i] = random.nextInt(BASE);
+			seed[i] = random.nextInt(Base62.BASE);
 		}
 		return seed;
 	}
 
-
-	public static String fromBase10(int i) {
-		StringBuilder sb = new StringBuilder("");
-		if (i == 0) {
-			return "a";
-		}
-		while (i > 0) {
-			i = fromBase10(i, sb);
-		}
-		return sb.reverse().toString();
-	}
-
-	private static int fromBase10(int i, final StringBuilder sb) {
-		int rem = i % BASE;
-		sb.append(ALPHABET.charAt(rem));
-		return i / BASE;
-	}
-
-	public static int toBase10(String str) {
-		return toBase10(new StringBuilder(str).reverse().toString().toCharArray());
-	}
-
-	private static int toBase10(char ch) {
-		return toBase10(ALPHABET.indexOf(ch), 0);
-	}
-
-	private static int toBase10(char[] chars) {
-		int n = 0;
-		for (int i = chars.length - 1; i >= 0; i--) {
-			n += toBase10(ALPHABET.indexOf(chars[i]), i);
-		}
-		return n;
-	}
-
-	private static int toBase10(int n, int pow) {
-		return n * (int) Math.pow(BASE, pow);
-	}
 
 	public static String generateCode(int seq) {
 		int[] seed = generateSeed(GENRATE_COUPON_LENGTH);
 
 		int sum = Arrays.stream(seed).sum();
 
-		String hashCode = fromBase10(sum);
-		if (hashCode.length() < 2) {
-			hashCode = CouponLib.fillZero(hashCode, 2 - hashCode.length());
+		String hashCode = Base62.fromBase10(sum);
+		if (hashCode.length() < HASH_CODE_LENGTH) {
+			hashCode = CouponLib.fillZero(hashCode, HASH_CODE_LENGTH - hashCode.length());
 		}
 
-		String id = fromBase10(seq);
+		String id = Base62.fromBase10(seq);
 		String fillZeroId = fillZero(id, ID_LENGTH - id.length());
 		String rotatedId = rightCyclicRotation(fillZeroId, sum);
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < GENRATE_COUPON_LENGTH; i++) {
-			sb.append(ALPHABET.charAt(seed[i]));
+			sb.append(Base62.ALPHABET.charAt(seed[i]));
 			if (i < rotatedId.length()) {
 				sb.append(rotatedId.charAt(i));
 			}
@@ -95,19 +55,21 @@ public class CouponLib {
 		return sb.toString();
 	}
 
-	public static String restoreSeq(String str) {
+	// restoreSeq
+	public static String decodeSeq(String idStr) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 1; i < GENRATE_COUPON_LENGTH + ID_LENGTH - 1; i += 2) {
-			sb.append(str.charAt(i));
+		for (int i = 1; i < COUPON_CODE_LENGTH - 1; i += 2) {
+			sb.append(idStr.charAt(i));
 		}
 		return sb.toString();
 	}
 
-	public static String restoreCode(String str) {
+	// restoreCode
+	public static String decodeCode(String code) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < str.length() - 2; i++) {
-			if (i % 2 == 0 || GENRATE_COUPON_LENGTH + ID_LENGTH - 2 < i) {
-				sb.append(str.charAt(i));
+		for (int i = 0; i < code.length() - HASH_CODE_LENGTH; i++) {
+			if (i % 2 == 0 || COUPON_CODE_LENGTH - 2 < i) {
+				sb.append(code.charAt(i));
 			}
 
 		}
@@ -115,24 +77,25 @@ public class CouponLib {
 	}
 
 	public static boolean isInvalidCode(String code) {
-		String restoreCode = restoreCode(code);
+		String restoreCode = decodeCode(code);
 		String hashStr = code.substring(GENRATE_COUPON_LENGTH + ID_LENGTH, code.length());
-		int hashcode = CouponLib.toBase10(hashStr);
+		int hashcode = Base62.toBase10(hashStr);
 
 		int sum = 0;
 		for (int i = 0; i < restoreCode.length(); i++) {
-			sum += toBase10(restoreCode.charAt(i));
+			sum += Base62.toBase10(restoreCode.charAt(i));
 		}
 		return hashcode == sum;
 	}
 
-	public static long getSeq(String code){
-		String base62HashCode = code.substring(code.length() - 2, code.length());
-		int hashCode = toBase10(base62HashCode);
-		String rotationSeq = restoreSeq(code);
+	// getSeq
+	public static long restoreSeq(String code) {
+		String base62HashCode = code.substring(code.length() - HASH_CODE_LENGTH, code.length());
+		int hashCode = Base62.toBase10(base62HashCode);
+		String rotationSeq = decodeSeq(code);
 		String bas62Seq = leftCyclicRotation(rotationSeq, hashCode);
 
-		return toBase10(bas62Seq);
+		return Base62.toBase10(bas62Seq);
 	}
 
 	public static String rightCyclicRotation(String str, int count) {
