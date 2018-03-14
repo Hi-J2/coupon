@@ -14,7 +14,7 @@
 
 **Build & Excute**
 
-​	`./gradle build && java -jar build/libs/coupon-0.0.1.jar`
+​	`gradle build && java -jar build/libs/coupon-0.0.1.jar`
 
 **Swagger API-Document **
 
